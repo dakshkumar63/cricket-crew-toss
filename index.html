@@ -124,7 +124,7 @@
             <span class="step-badge">3</span>
             <div>
               <h2>Final Score</h2>
-              <p>Submit runs and winner after the match. Once submitted, the result is locked.</p>
+              <p>Submit both team scores. The winner is picked automatically and then locked.</p>
             </div>
           </div>
 
@@ -137,15 +137,9 @@
               <span>Team B runs</span>
               <input id="teamBRuns" name="teamBRuns" type="number" min="0" max="999" inputmode="numeric" placeholder="0" />
             </label>
-            <label>
-              <span>Winner</span>
-              <select id="winnerSelect" name="winnerSelect">
-                <option value="">Select winner</option>
-                <option value="Team A">Team A</option>
-                <option value="Team B">Team B</option>
-                <option value="Tie">Tie</option>
-              </select>
-            </label>
+            <div class="winner-preview" id="winnerPreview">
+              Winner appears after scores
+            </div>
             <button id="submitScoreButton" type="submit">Submit Locked Result</button>
           </form>
 

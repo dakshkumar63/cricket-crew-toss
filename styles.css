@@ -544,6 +544,20 @@ select {
   background: var(--ink);
 }
 
+.winner-preview {
+  display: grid;
+  align-self: end;
+  place-items: center;
+  min-height: 46px;
+  border: 1px solid rgba(20, 33, 61, 0.12);
+  border-radius: var(--radius);
+  padding: 8px 10px;
+  color: #063b33;
+  background: rgba(8, 168, 138, 0.12);
+  font-weight: 900;
+  text-align: center;
+}
+
 .score-form button:disabled,
 .score-form input:disabled,
 .score-form select:disabled {

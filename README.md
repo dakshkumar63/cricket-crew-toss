@@ -11,7 +11,8 @@ An offline-friendly cricket team maker for mobile.
 - If the player count creates one extra player, the app marks that player as the "Both / extra player".
 - Tosses randomly and chooses Bat or Ball.
 - Saves each generated match with date and time.
-- Lets you submit Team A runs, Team B runs, and the winner.
+- Lets you submit Team A runs and Team B runs.
+- Picks the winner automatically from the higher score, or marks a tie.
 - Locks the final score after submission.
 - Shows public match history when Firebase Firestore is connected.
 - Shares teams and toss stats through WhatsApp or the phone share sheet.

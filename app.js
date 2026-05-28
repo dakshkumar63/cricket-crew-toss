@@ -31,7 +31,7 @@ const els = {
   scoreForm: document.querySelector("#scoreForm"),
   teamARuns: document.querySelector("#teamARuns"),
   teamBRuns: document.querySelector("#teamBRuns"),
-  winnerSelect: document.querySelector("#winnerSelect"),
+  winnerPreview: document.querySelector("#winnerPreview"),
   submitScoreButton: document.querySelector("#submitScoreButton"),
   finalResultBox: document.querySelector("#finalResultBox"),
   shareStatsButton: document.querySelector("#shareStatsButton"),
@@ -161,6 +161,7 @@ async function buildTeams() {
   state.toss = null;
   state.final = null;
   state.currentMatchId = null;
+  clearScoreInputs();
   render();
 
   const match = makeMatchRecord("teams-created");
@@ -209,19 +210,24 @@ async function submitFinalScore(event) {
     return;
   }
 
-  const teamARuns = Number(els.teamARuns.value);
-  const teamBRuns = Number(els.teamBRuns.value);
-  const winner = els.winnerSelect.value;
+  const teamARaw = els.teamARuns.value;
+  const teamBRaw = els.teamBRuns.value;
+  const teamARuns = Number(teamARaw);
+  const teamBRuns = Number(teamBRaw);
 
-  if (!Number.isInteger(teamARuns) || !Number.isInteger(teamBRuns) || teamARuns < 0 || teamBRuns < 0) {
+  if (
+    teamARaw === "" ||
+    teamBRaw === "" ||
+    !Number.isInteger(teamARuns) ||
+    !Number.isInteger(teamBRuns) ||
+    teamARuns < 0 ||
+    teamBRuns < 0
+  ) {
     notify("Enter valid runs for both teams.");
     return;
   }
-  if (!winner) {
-    notify("Select the winning team.");
-    return;
-  }
 
+  const winner = decideWinner(teamARuns, teamBRuns);
   state.final = {
     teamARuns,
     teamBRuns,
@@ -237,6 +243,18 @@ async function submitFinalScore(event) {
   saveState();
   render();
   notify("Final score saved and locked.");
+}
+
+function decideWinner(teamARuns, teamBRuns) {
+  if (teamARuns > teamBRuns) return "Team A";
+  if (teamBRuns > teamARuns) return "Team B";
+  return "Tie";
+}
+
+function scoreSummary(final) {
+  if (!final) return "";
+  const score = `Team A ${final.teamARuns}, Team B ${final.teamBRuns}`;
+  return final.winner === "Tie" ? `${score}. Match tied.` : `${score}. Winner: ${final.winner}.`;
 }
 
 function makeMatchRecord(eventType) {
@@ -357,7 +375,7 @@ function shareText() {
     ? `\n\nToss\n${state.toss.winner} won and chose to ${state.toss.choice}.`
     : "\n\nToss\nNot done yet.";
   const final = state.final
-    ? `\n\nFinal Score\nTeam A: ${state.final.teamARuns}\nTeam B: ${state.final.teamBRuns}\nWinner: ${state.final.winner}`
+    ? `\n\nFinal Score\n${scoreSummary(state.final)}`
     : "";
   const stamp = new Date(state.result.createdAt).toLocaleString();
 
@@ -518,13 +536,30 @@ function renderScore() {
   if (state.final) {
     els.teamARuns.value = state.final.teamARuns;
     els.teamBRuns.value = state.final.teamBRuns;
-    els.winnerSelect.value = state.final.winner;
+    els.winnerPreview.textContent = state.final.winner === "Tie" ? "Locked: Tie" : `Locked: ${state.final.winner}`;
     els.finalResultBox.hidden = false;
-    els.finalResultBox.textContent = `Locked result: Team A ${state.final.teamARuns}, Team B ${state.final.teamBRuns}. Winner: ${state.final.winner}.`;
+    els.finalResultBox.textContent = `Locked result: ${scoreSummary(state.final)}`;
   } else {
+    els.winnerPreview.textContent = draftWinnerText();
     els.finalResultBox.hidden = true;
     els.finalResultBox.textContent = "";
   }
+}
+
+function draftWinnerText() {
+  const teamARuns = Number(els.teamARuns.value);
+  const teamBRuns = Number(els.teamBRuns.value);
+  if (!els.teamARuns.value || !els.teamBRuns.value || teamARuns < 0 || teamBRuns < 0) {
+    return "Winner appears after scores";
+  }
+  const winner = decideWinner(teamARuns, teamBRuns);
+  return winner === "Tie" ? "Current: Tie" : `Current: ${winner}`;
+}
+
+function clearScoreInputs() {
+  els.teamARuns.value = "";
+  els.teamBRuns.value = "";
+  els.winnerPreview.textContent = "Winner appears after scores";
 }
 
 function renderHistory() {
@@ -543,7 +578,9 @@ function renderHistory() {
     const both = match.result?.bothPlayer ? `Both: ${match.result.bothPlayer.name}` : "No extra player";
     const toss = match.toss ? `${match.toss.winner} chose ${match.toss.choice}` : "Toss pending";
     const final = match.final
-      ? `<div class="history-score"><strong>${escapeHtml(match.final.winner)} won</strong><span>Team A ${match.final.teamARuns} - Team B ${match.final.teamBRuns}</span></div>`
+      ? `<div class="history-score"><strong>${escapeHtml(
+          match.final.winner === "Tie" ? "Match tied" : `${match.final.winner} won`,
+        )}</strong><span>${escapeHtml(scoreSummary(match.final))}</span></div>`
       : '<div class="history-score"><strong>Result pending</strong><span>Score not submitted</span></div>';
 
     card.innerHTML = `
@@ -623,6 +660,7 @@ function bindEvents() {
     state.toss = null;
     state.final = null;
     state.currentMatchId = null;
+    clearScoreInputs();
     saveState();
     render();
   });
@@ -633,6 +671,7 @@ function bindEvents() {
     state.toss = null;
     state.final = null;
     state.currentMatchId = null;
+    clearScoreInputs();
     saveState();
     render();
   });
@@ -640,6 +679,12 @@ function bindEvents() {
   els.generateButton.addEventListener("click", () => buildTeams());
   els.tossButton.addEventListener("click", () => runToss());
   els.scoreForm.addEventListener("submit", submitFinalScore);
+  els.teamARuns.addEventListener("input", () => {
+    if (!state.final) els.winnerPreview.textContent = draftWinnerText();
+  });
+  els.teamBRuns.addEventListener("input", () => {
+    if (!state.final) els.winnerPreview.textContent = draftWinnerText();
+  });
   els.copyStatsButton.addEventListener("click", copyStats);
   els.downloadStatsButton.addEventListener("click", downloadStats);
   els.shareStatsButton.addEventListener("click", () => shareToWhatsApp(shareText(), "Cricket match"));

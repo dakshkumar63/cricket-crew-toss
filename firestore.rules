@@ -1,0 +1,30 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /matches/{matchId} {
+      allow read: if true;
+
+      allow create: if request.resource.data.keys().hasAll([
+        'schemaVersion',
+        'createdAt',
+        'updatedAt',
+        'status',
+        'players',
+        'result',
+        'events'
+      ])
+      && request.resource.data.status in ['active', 'final']
+      && request.resource.data.schemaVersion == 2;
+
+      allow update: if resource.data.status != 'final'
+      && request.resource.data.schemaVersion == resource.data.schemaVersion
+      && request.resource.data.createdAt == resource.data.createdAt
+      && request.resource.data.players == resource.data.players
+      && request.resource.data.result == resource.data.result
+      && request.resource.data.status in ['active', 'final'];
+
+      allow delete: if false;
+    }
+  }
+}

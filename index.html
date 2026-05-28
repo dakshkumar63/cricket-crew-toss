@@ -30,6 +30,12 @@
       </header>
 
       <main>
+        <section class="sync-panel" aria-live="polite">
+          <span class="sync-dot" id="syncDot"></span>
+          <strong id="syncLabel">Local mode</strong>
+          <span id="syncDetail">Connect Firebase to make match history visible to everyone.</span>
+        </section>
+
         <section class="pitch-panel">
           <div class="pitch-visual" aria-hidden="true">
             <div class="boundary">
@@ -113,9 +119,42 @@
           </article>
         </section>
 
-        <section class="panel share-panel">
+        <section class="panel score-panel">
           <div class="section-title">
             <span class="step-badge">3</span>
+            <div>
+              <h2>Final Score</h2>
+              <p>Submit runs and winner after the match. Once submitted, the result is locked.</p>
+            </div>
+          </div>
+
+          <form id="scoreForm" class="score-form">
+            <label>
+              <span>Team A runs</span>
+              <input id="teamARuns" name="teamARuns" type="number" min="0" max="999" inputmode="numeric" placeholder="0" />
+            </label>
+            <label>
+              <span>Team B runs</span>
+              <input id="teamBRuns" name="teamBRuns" type="number" min="0" max="999" inputmode="numeric" placeholder="0" />
+            </label>
+            <label>
+              <span>Winner</span>
+              <select id="winnerSelect" name="winnerSelect">
+                <option value="">Select winner</option>
+                <option value="Team A">Team A</option>
+                <option value="Team B">Team B</option>
+                <option value="Tie">Tie</option>
+              </select>
+            </label>
+            <button id="submitScoreButton" type="submit">Submit Locked Result</button>
+          </form>
+
+          <div id="finalResultBox" class="final-result" hidden></div>
+        </section>
+
+        <section class="panel share-panel">
+          <div class="section-title">
+            <span class="step-badge">4</span>
             <div>
               <h2>Share</h2>
               <p>Send the teams, toss result, or app link straight to your WhatsApp group.</p>
@@ -131,10 +170,25 @@
 
           <textarea id="sharePreview" readonly aria-label="Share preview">Teams will appear here after a draw.</textarea>
         </section>
+
+        <section class="panel history-panel">
+          <div class="section-title">
+            <span class="step-badge">5</span>
+            <div>
+              <h2>Public Match History</h2>
+              <p>Every saved team draw, toss, and locked result appears here for everyone when online storage is connected.</p>
+            </div>
+          </div>
+
+          <div id="matchHistory" class="match-history">
+            <div class="history-empty">No matches saved yet.</div>
+          </div>
+        </section>
       </main>
     </div>
 
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="firebase-config.js"></script>
     <script src="app.js" defer></script>
   </body>
 </html>

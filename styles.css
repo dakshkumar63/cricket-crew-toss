@@ -36,6 +36,7 @@ body {
 
 button,
 input,
+select,
 textarea {
   font: inherit;
 }
@@ -47,6 +48,7 @@ button {
 
 button:focus-visible,
 input:focus-visible,
+select:focus-visible,
 textarea:focus-visible {
   outline: 3px solid rgba(40, 100, 255, 0.35);
   outline-offset: 2px;
@@ -124,6 +126,45 @@ h2 {
 main {
   display: grid;
   gap: 16px;
+}
+
+.sync-panel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(20, 33, 61, 0.12);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 12px 34px rgba(20, 33, 61, 0.08);
+}
+
+.sync-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--sun);
+  box-shadow: 0 0 0 5px rgba(255, 196, 61, 0.16);
+}
+
+.sync-panel.online .sync-dot {
+  background: var(--green);
+  box-shadow: 0 0 0 5px rgba(8, 168, 138, 0.16);
+}
+
+.sync-panel.error .sync-dot {
+  background: var(--coral);
+  box-shadow: 0 0 0 5px rgba(255, 107, 107, 0.16);
+}
+
+.sync-panel strong {
+  flex: 0 0 auto;
+}
+
+.sync-panel span:last-child {
+  min-width: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
 }
 
 .pitch-panel,
@@ -263,6 +304,7 @@ main {
 }
 
 input,
+select,
 textarea {
   width: 100%;
   border: 1px solid rgba(20, 33, 61, 0.16);
@@ -277,9 +319,16 @@ input {
   font-weight: 760;
 }
 
+select {
+  min-height: 46px;
+  padding: 0 12px;
+  font-weight: 760;
+}
+
 .count-row button,
 .player-actions button,
 .share-actions button,
+.score-form button,
 .primary-button,
 .secondary-button {
   min-height: 46px;
@@ -475,6 +524,132 @@ input {
   line-height: 1.45;
 }
 
+.score-form {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.score-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.score-form button {
+  align-self: end;
+  color: #fff;
+  background: var(--ink);
+}
+
+.score-form button:disabled,
+.score-form input:disabled,
+.score-form select:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.final-result {
+  margin-top: 12px;
+  border-radius: var(--radius);
+  padding: 12px;
+  color: #063b33;
+  background: rgba(8, 168, 138, 0.13);
+  font-weight: 850;
+}
+
+.match-history {
+  display: grid;
+  gap: 10px;
+}
+
+.history-empty {
+  border: 1px dashed rgba(20, 33, 61, 0.2);
+  border-radius: var(--radius);
+  padding: 16px;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 800;
+}
+
+.history-card {
+  border: 1px solid rgba(20, 33, 61, 0.12);
+  border-radius: var(--radius);
+  padding: 12px;
+  background: #fff;
+}
+
+.history-head,
+.history-score {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.history-head strong,
+.history-score strong {
+  overflow-wrap: anywhere;
+}
+
+.history-head time {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.history-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 9px;
+}
+
+.history-meta span {
+  border-radius: var(--radius);
+  padding: 6px 8px;
+  color: var(--ink);
+  background: #eef3f6;
+  font-size: 0.78rem;
+  font-weight: 850;
+}
+
+.history-score {
+  margin-top: 10px;
+  border-radius: var(--radius);
+  padding: 10px;
+  background: #fff6d6;
+  color: #7c4700;
+  font-weight: 850;
+}
+
+.history-teams {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.history-teams div {
+  border-radius: var(--radius);
+  padding: 10px;
+  background: #fbfcff;
+}
+
+.history-teams h3 {
+  margin: 0 0 6px;
+  font-size: 0.88rem;
+}
+
+.history-teams p {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
 .toast {
   position: fixed;
   left: 50%;
@@ -522,14 +697,24 @@ input {
 
   .count-row,
   .players-list,
-  .team-board {
+  .team-board,
+  .score-form,
+  .history-teams {
     grid-template-columns: 1fr;
   }
 
   .count-row button,
   .player-actions button,
-  .share-actions button {
+  .share-actions button,
+  .score-form button {
     width: 100%;
+  }
+
+  .sync-panel,
+  .history-head,
+  .history-score {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .result-strip {

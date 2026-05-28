@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Cricket Crew Toss icon">
+  <rect width="512" height="512" rx="96" fill="#08a88a"/>
+  <circle cx="256" cy="256" r="188" fill="#c8ff46"/>
+  <rect x="220" y="92" width="52" height="314" rx="26" fill="#14213d" transform="rotate(35 246 249)"/>
+  <circle cx="352" cy="168" r="44" fill="#ff6b6b"/>
+  <path d="M336 158c18 10 35 12 52 7" fill="none" stroke="#fffefa" stroke-width="10" stroke-linecap="round"/>
+  <path d="M156 360h172" fill="none" stroke="#fffefa" stroke-width="24" stroke-linecap="round"/>
+  <path d="M175 330v60M226 330v60M277 330v60" fill="none" stroke="#14213d" stroke-width="16" stroke-linecap="round"/>
+</svg>

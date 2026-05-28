@@ -1,0 +1,19 @@
+{
+  "name": "Cricket Crew Toss",
+  "short_name": "Crew Toss",
+  "description": "Offline cricket team maker with random captains, fair teams, toss, and WhatsApp sharing.",
+  "start_url": ".",
+  "scope": ".",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#fcfaf2",
+  "theme_color": "#08a88a",
+  "icons": [
+    {
+      "src": "assets/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

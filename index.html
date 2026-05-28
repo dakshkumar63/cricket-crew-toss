@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#08a88a" />
+    <meta
+      name="description"
+      content="Offline cricket team maker with random captains, fair team split, toss, and WhatsApp sharing."
+    />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/icon.svg" />
+    <title>Cricket Crew Toss</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand-mark" aria-hidden="true">
+          <span></span>
+        </div>
+        <div>
+          <p class="eyebrow">Offline cricket picker</p>
+          <h1>Cricket Crew Toss</h1>
+        </div>
+        <button class="icon-button" id="installButton" type="button" title="Install app" hidden>
+          <span aria-hidden="true">↓</span>
+        </button>
+      </header>
+
+      <main>
+        <section class="pitch-panel">
+          <div class="pitch-visual" aria-hidden="true">
+            <div class="boundary">
+              <div class="crease"></div>
+              <div class="wicket wicket-left"></div>
+              <div class="wicket wicket-right"></div>
+              <div class="ball"></div>
+            </div>
+          </div>
+          <div class="quick-summary">
+            <span id="summaryPlayers">0 players</span>
+            <span id="summaryTeams">Teams waiting</span>
+            <span id="summaryToss">Toss waiting</span>
+          </div>
+        </section>
+
+        <section class="control-grid">
+          <article class="panel setup-panel">
+            <div class="section-title">
+              <span class="step-badge">1</span>
+              <div>
+                <h2>Players</h2>
+                <p>Enter how many friends are playing, then assign names or keep numbers.</p>
+              </div>
+            </div>
+
+            <form id="playerCountForm" class="count-form">
+              <label for="playerCount">Number of players</label>
+              <div class="count-row">
+                <input id="playerCount" name="playerCount" type="number" min="2" max="40" value="12" inputmode="numeric" />
+                <button type="submit">Make List</button>
+              </div>
+            </form>
+
+            <div class="player-actions">
+              <button id="fillNumbersButton" type="button">Use Player Numbers</button>
+              <button id="clearPlayersButton" type="button">Clear</button>
+            </div>
+
+            <div id="playersList" class="players-list" aria-live="polite"></div>
+          </article>
+
+          <article class="panel action-panel">
+            <div class="section-title">
+              <span class="step-badge">2</span>
+              <div>
+                <h2>Random Draw</h2>
+                <p>Captains are picked first, then everyone else is shuffled into fair teams.</p>
+              </div>
+            </div>
+
+            <div class="action-stack">
+              <button id="generateButton" class="primary-button" type="button">Pick Captains & Teams</button>
+              <button id="tossButton" class="secondary-button" type="button">Toss for Bat or Ball</button>
+            </div>
+
+            <div class="result-strip" id="tossResult">
+              <strong>Toss</strong>
+              <span>Ready when teams are made.</span>
+            </div>
+
+            <div class="team-board">
+              <div class="team-column team-a">
+                <div class="team-header">
+                  <span>Team A</span>
+                  <strong id="teamACount">0</strong>
+                </div>
+                <div id="teamAList" class="team-list empty">No players yet</div>
+              </div>
+
+              <div class="team-column team-b">
+                <div class="team-header">
+                  <span>Team B</span>
+                  <strong id="teamBCount">0</strong>
+                </div>
+                <div id="teamBList" class="team-list empty">No players yet</div>
+              </div>
+            </div>
+
+            <div id="bothPlayerBox" class="both-player" hidden></div>
+          </article>
+        </section>
+
+        <section class="panel share-panel">
+          <div class="section-title">
+            <span class="step-badge">3</span>
+            <div>
+              <h2>Share</h2>
+              <p>Send the teams, toss result, or app link straight to your WhatsApp group.</p>
+            </div>
+          </div>
+
+          <div class="share-actions">
+            <button id="shareStatsButton" type="button">Share Stats</button>
+            <button id="shareAppButton" type="button">Share App Link</button>
+            <button id="copyStatsButton" type="button">Copy Stats</button>
+            <button id="downloadStatsButton" type="button">Download Match</button>
+          </div>
+
+          <textarea id="sharePreview" readonly aria-label="Share preview">Teams will appear here after a draw.</textarea>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>
